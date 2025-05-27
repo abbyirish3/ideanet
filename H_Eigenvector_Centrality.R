@@ -1,3 +1,7 @@
+# Abby Headstrom 
+# May 27th 2025
+#This file calculates the h eigenvector centrality of a hypergraph 
+
 library(igraph)
 library(mclust)
 library(HyperG)
@@ -289,46 +293,5 @@ convolve_r <- function(in1, in2) {
   # For these specific arrays with very small values, direct convolution is likely more accurate
   return(direct_conv(in1, in2))
 }
-
-
-# TESTING 
-
-
-# first import the graph 
-IMPORT_BIPARTITE_EDGELIST_FILEPATH <- "~/Desktop/Mucha/bipartite_edges.csv"
-
-EXPORT_INCIDENCE_MATRIX_FILEPATH <- "~/Desktop/Mucha/bipartite_incidence_matrix.csv"
-
-EXPORT_HEC_DF_FILEPATH <- "~/Desktop/Mucha/hec_scores_r.csv"
-
-# read from edgelist and create/plot bipartite graph
-import_XGI_to_iGraph <- function() {
-  # read edgelist
-  edges = read.csv(IMPORT_BIPARTITE_EDGELIST_FILEPATH, header = TRUE)
-  # modify hyperedges in the table to avoid igraph considering hyperedge same as node
-  edges$hyperedge <- paste0("T", edges$hyperedge)
-  # Create the bipartite graph
-  g <- graph_from_data_frame(edges, directed = FALSE)
-  # Set the bipartite vertex type (FALSE for 'from' nodes, TRUE for 'to' nodes)
-  V(g)$type <- c(rep(FALSE, length(unique(edges$node))), rep(TRUE, length(unique(edges$hyperedge))))
-  
-  return(g)
-}
-
-# write incidence matrix of bipartite graph
-export_iGraph_to_XGI <- function(bipartite_graph) {
-  # Convert to incidence matrix
-  inc_matrix <- as_biadjacency_matrix(bipartite_graph, types=)
-  # Save as CSV
-  write.csv(as.matrix(inc_matrix), EXPORT_INCIDENCE_MATRIX_FILEPATH, row.names = TRUE)
-}
-
-####### export CEC scores from R #############
-hec_df <- data.frame(
-  node = names(h_centrality2),
-  hec_r = h_centrality_scores
-)
-
-
 
 
